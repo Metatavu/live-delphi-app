@@ -8,3 +8,6 @@ npm-debug.log
 .settings
 /nbproject
 .sass-cache
+/www/css
+/www/js
+/www/index.html

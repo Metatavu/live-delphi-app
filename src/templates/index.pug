@@ -22,6 +22,7 @@ html
     script(src='https://auth.metatavu.io/auth/js/keycloak.js',type='text/javascript')
     script(src='js/config.js')
     script(src='js/live-delphi-auth.js')
+    script(src='js/live-delphi-query.js')
     script(src='js/live-delphi-client.js')
     script(src='js/live-delphi-chart.js')
     script(src='js/live-delphi-comment.js')
@@ -35,13 +36,19 @@ html
       #navbarContent.collapse.navbar-collapse
         ul.navbar-nav.mr-auto
           li.nav-item.active
-            a.nav-link(href='#') Home
+            a.nav-link.query-selection(href='#') Back to query selection
           li.nav-item
             a.nav-link(href='#') Settings
-    .container
+    .container.chart-view
       .row.chart-row
         .chart-container
           canvas#chart(width='400', height='400')
+      .row.query-row
+        p.query-thesis
       .row.chat-row
         .swiper-container
           .swiper-wrapper
+    .container.query-view
+      .row
+        .query-container
+          ul.available-queries.list-group

@@ -11,19 +11,17 @@
       const port = serverConfig.port;
       const httpProtocol = secure ? 'https' : 'http';
       const wsProtocol = secure ? 'wss' : 'ws';
-      
-      console.log(serverConfig);
-      
       const serverUrl = httpProtocol + '://' + host + ':' + port;
       const wsUrl = wsProtocol + '://' + host + ':' + port;
-      
+
       this.element.on('authenticated', $.proxy(this._onAuthenticated, this));
       this.element.on('joined', $.proxy(this._onJoined, this));
       this.element.on('connect', $.proxy(this._onConnect, this));
       this.element.on('message:answer-changed', $.proxy(this._onMessageAnswerChanged, this));
       this.element.on('message:comment-added', $.proxy(this._onMessageCommentAdded, this));
+      this.element.on('message:query-found', $.proxy(this._onMessageQueryFound, this));
       
-      console.log(serverUrl);
+      this.element.liveDelphiQuery();
       
       this.element.liveDelphiClient({
         wsUrl: wsUrl,
@@ -35,30 +33,28 @@
       });
       
       this.element.liveDelphiComment();
-      
       this.element.liveDelphiAuth('authenticate'); 
     },
     
     sessionId: function () {
       return this.element.liveDelphiAuth('sessionId');
     },
-    
-    joinQuery: function (queryId) {
-      this.element.liveDelphiClient("joinQuery", this.sessionId(), queryId);
-    },
-    
+
     _onAuthenticated: function () {
       this.element.liveDelphiAuth('join');
     },
     
     _onJoined: function () {
       this.element.liveDelphiClient('connect', this.sessionId());
-      // TODO: Move joinQuery call
-      this.joinQuery("2194774e-ebe9-49ce-bc6b-4e28645da40c");
+      this.element.liveDelphiQuery('joinQuery');
     },
     
     _onConnect: function (event, data) {
       $("#chart").liveDelphiChart();
+    },
+    
+    _onMessageQueryFound: function(event, data) {
+      this.element.liveDelphiQuery('renderQueryElement', data);
     },
     
     _onMessageAnswerChanged: function (event, data) {
