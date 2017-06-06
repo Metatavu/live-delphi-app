@@ -1,1 +1,0 @@
-function getConfig() { return {"server":{"host":"live-dev.edelphi.org","port":8000,"secure":false}}; };
