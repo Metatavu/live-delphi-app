@@ -3,7 +3,7 @@
 (function(){
   'use strict';
   
-  $.widget("custom.liveDelphi", {    
+  $.widget("custom.liveDelphi", { 
     _create : function() {
       const serverConfig = getConfig().server;
       const secure = serverConfig.secure;
@@ -21,6 +21,7 @@
       this.element.on('joined', $.proxy(this._onJoined, this));
       this.element.on('connect', $.proxy(this._onConnect, this));
       this.element.on('message:answer-changed', $.proxy(this._onMessageAnswerChanged, this));
+      this.element.on('message:comment-added', $.proxy(this._onMessageCommentAdded, this));
       
       console.log(serverUrl);
       
@@ -32,6 +33,8 @@
       this.element.liveDelphiAuth({
         serverUrl: serverUrl
       });
+      
+      this.element.liveDelphiComment();
       
       this.element.liveDelphiAuth('authenticate'); 
     },
@@ -63,6 +66,19 @@
         x: data.x,
         y: data.y
       });
+    },
+    
+    _onMessageCommentAdded: function (event, data) {
+      const color = $("#chart").liveDelphiChart('getColor', {
+        x: data.x,
+        y: data.y
+      }, 0);
+      
+      if (data.parentCommentId) {
+        this.element.liveDelphiComment('renderChildComment', color, data); 
+      } else {
+        this.element.liveDelphiComment('renderRootComment', color, data); 
+      }
     }
     
   });
