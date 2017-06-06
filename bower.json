@@ -1,0 +1,31 @@
+{
+  "name": "live-delfoi-app",
+  "description": "Delphi technique is used for bringing values, new viewpoints and ideas as a foundation for planning and decision making, i.e. making qualitative research. Live Delphi application extends Delphi method with realtime data collection features",
+  "main": "",
+  "authors": [
+    "Metatavu Oy"
+  ],
+  "license": "AGPL-3.0",
+  "homepage": "https://github.com/Metatavu/live-delphi-app",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap.min.css": "https://cdn.metatavu.io/libs/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css",
+    "font-awesome.min": "https://cdn.metatavu.io/libs/font-awesome/4.6.3/css/font-awesome.min.css",
+    "swiper.min": "https://cdn.metatavu.io/libs/swiper/3.4.2/css/swiper.min.css",
+    "jquery.min": "https://cdn.metatavu.io/libs/jquery/3.1.1/jquery.min.js",
+    "jquery-ui.min": "https://cdn.metatavu.io/libs/jquery-ui/1.12.1/jquery-ui.min.js",
+    "moment-with-locales": "https://cdn.metatavu.io/libs/moment/2.17.1/moment-with-locales.js",
+    "bootstrap.min.js": "https://cdn.metatavu.io/libs/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js",
+    "tether.min": "https://cdn.metatavu.io/libs/tether/1.3.3/js/tether.min.js",
+    "bootbox.min": "https://cdn.metatavu.io/libs/bootbox-js/4.4.0/bootbox.min.js",
+    "Chart.min": "https://cdn.metatavu.io/libs/chart-js/2.5.0/Chart.min.js",
+    "swiper.jquery.min": "https://cdn.metatavu.io/libs/swiper/3.4.2/js/swiper.jquery.min.js",
+    "bootstrap.min": "https://cdn.metatavu.io/libs/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
+  }
+}
