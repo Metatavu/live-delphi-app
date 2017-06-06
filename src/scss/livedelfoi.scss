@@ -4,6 +4,16 @@
   }
 }
 
+.modal-header {
+  .bootbox-close-button {
+    margin-right: 15px;
+  }
+  
+  h4.modal-title {
+    font-size: 16px;
+  }
+}
+
 .query-view {
   .query-container {
     width: 100%;
@@ -21,6 +31,12 @@
   .query-row {
     width: 100%;
     padding: 10px;
+    
+    .query-thesis {
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
   }
   
   .chart-row {
@@ -33,7 +49,7 @@
   .swiper-container {
       width: 100%;
       height: 100%;
-      height: 120px;
+      height: 135px;
   }
   .swiper-slide {
       background: #fff;
@@ -68,6 +84,7 @@
     }
 
     .comment-text {
+      min-height: 50px;
       background: #F8F8F8;
       border-radius: 2px;
       padding-left: 25px;
@@ -89,14 +106,6 @@
     }
   }
 
-}
-
-.input-container {
-  position: absolute;
-  bottom: -90px;
-  left: 0;
-  padding-left: 15px;
-  padding-right: 15px;
 }
 
 .blockquote {

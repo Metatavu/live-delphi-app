@@ -26,14 +26,7 @@
         },
         options: {
           tooltips: {
-            callbacks: {
-              title: function(items, data) {
-                return "";
-              },
-              label: function(item, data) {
-                return "Lorem ipsum dolor sit amet...";
-              }
-            }
+            enabled: false
           },
           legend: {
             display: false
