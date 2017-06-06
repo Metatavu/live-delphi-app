@@ -1,4 +1,4 @@
-/* global window, document, WebSocket, MozWebSocket, $, _*/
+/* global window, document, WebSocket, MozWebSocket, $, _, bootbox*/
 (function() {
   'use strict';
   
@@ -16,6 +16,8 @@
     _create : function() {
       this._userHashes = [];
       this._series = [];
+      this.currentX  = 0;
+      this.currentY = 0;
       
       this._scatterChart = new Chart(this.element, {
         type: 'line',
@@ -33,26 +35,6 @@
               }
             }
           },
-          onClick: function (event) {
-            var canvas = event.target;
-            var x = event.layerX;
-            var y = event.layerY;
-            var chartArea = this._scatterChart.chartArea;
-
-            var chartLeft = chartArea.left;
-            var chartRight = chartArea.right;
-            var chartTop = chartArea.top;
-            var chartBottom = chartArea.bottom;
-
-            var xValue = ((x - chartLeft) / chartRight) * this.options.maxX;
-            var yValue = this.options.maxY - (((y - chartTop) / chartBottom) * this.options.maxY);
-            
-            $(document.body).liveDelphiClient('sendMessage', {
-              'type': 'answer',
-              'x': xValue,
-              'y': yValue
-            });
-          }.bind(this),
           legend: {
             display: false
           },
@@ -86,23 +68,87 @@
         }
       });
       
-      setInterval($.proxy(this._updateFade, this), this.options.fadeUpdateInterval);
+      $(this.element).on('touchstart', (e) => { this._onCanvasTouchStart(e) } );
+      $(this.element).on('touchend', (e) => { this._onCanvasTouchEnd(e) } );
+      setInterval(() => { this._updateFade() }, this.options.fadeUpdateInterval);
+    },
+    
+    _pointerEventToLayerCoords: function(e){
+      var position = $(this.element).offset();
+      var coords = {x:0, y:0};
+      if(e.type == 'touchstart' || e.type == 'touchmove' || e.type == 'touchend' || e.type == 'touchcancel'){
+        var touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
+        coords.x = touch.pageX;
+        coords.y = touch.pageY;
+      } else if (e.type == 'mousedown' || e.type == 'mouseup' || e.type == 'mousemove' || e.type == 'mouseover'|| e.type=='mouseout' || e.type=='mouseenter' || e.type=='mouseleave') {
+        coords.x = e.pageX;
+        coords.y = e.pageY;
+      }
+      
+      coords.x = coords.x - position.left;
+      coords.y = coords.y - position.top;
+      return coords;
+    },
+    
+    _onCanvasTouchEnd: function() {
+      clearTimeout(this.touchTimer);
+    },
+    
+    _onCanvasTouchStart: function(event) {
+      this.touchTimer = setTimeout(() => { this._ontouchAndHold() }, 2000);
+      var coords = this._pointerEventToLayerCoords(event);
+      var x = coords.x;
+      var y = coords.y;
+      var chartArea = this._scatterChart.chartArea;
+      var chartLeft = chartArea.left;
+      var chartRight = chartArea.right;
+      var chartTop = chartArea.top;
+      var chartBottom = chartArea.bottom;
+
+      var xValue = ((x - chartLeft) / chartRight) * this.options.maxX;
+      var yValue = this.options.maxY - (((y - chartTop) / chartBottom) * this.options.maxY);
+
+      $(document.body).liveDelphiClient('sendMessage', {
+        'type': 'answer',
+        'x': xValue,
+        'y': yValue
+      });
+    },
+    
+    _ontouchAndHold: function() {
+      bootbox.prompt({
+        title: 'Type a comment',
+        inputType: 'textarea',
+        callback: (comment) => {
+          if(comment) {
+            $(document.body).liveDelphiClient('sendMessage', {
+              'type': 'comment',
+              'comment': comment,
+              'x': this.currentX,
+              'y': this.currentY
+            });
+          }
+        }
+      });
     },
     
     _updateFade: function () {
        this._series.forEach($.proxy(function(dataset) {
-         dataset.pointBackgroundColor = this._getColor(dataset.data[0], dataset.lastUpdated);
+         dataset.pointBackgroundColor = this.getColor(dataset.data[0], dataset.lastUpdated);
        }, this));
        
        this._updateChart();
     },
     
     userData: function (userHash, data) {
+      this.currentX = data.x;
+      this.currentY = data.y;
+      
       var index = this._userHashes.indexOf(userHash);
       if (index !== -1) {
         var lastUpdated = new Date().getTime();
         this._series[index].data[0] = data;
-        this._series[index].pointBackgroundColor = this._getColor(data, lastUpdated);
+        this._series[index].pointBackgroundColor = this.getColor(data, lastUpdated);
         this._series[index].lastUpdated = lastUpdated;
       } else {
         this._userHashes.push(userHash);
@@ -128,7 +174,14 @@
       }
     },
     
-    _getColor: function (value, updated) {
+    getCurrentValues: function() {
+      return {
+        x: this.currentX,
+        y: this.currentY
+      };
+    },
+    
+    getColor: function (value, updated) {
       var red = Math.floor(this._convertToRange(value.x, 0, this.options.maxX, 0, 255));
       var blue = Math.floor(this._convertToRange(value.y, 0, this.options.maxY, 0, 255));
       var age = new Date().getTime() - updated;
@@ -138,7 +191,7 @@
     
     _getDataSet: function (data) { 
       var lastUpdated = new Date().getTime();
-      return {showLine: false, data: [ data ], pointBackgroundColor : this._getColor(data, lastUpdated), pointRadius: 5, lastUpdated: lastUpdated};
+      return {showLine: false, data: [ data ], pointBackgroundColor : this.getColor(data, lastUpdated), pointRadius: 5, lastUpdated: lastUpdated};
     },
     
     _getSeries: function() {
