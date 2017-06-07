@@ -8,7 +8,8 @@ npm-debug.log
 .settings
 /nbproject
 .sass-cache
-/www/css
+/www/css/*.min.css
+/www/css/*.min.css.*
 /www/js
 /www/index.html
 /www/bower_components
