@@ -1,23 +1,37 @@
 {
-  "name": "live-delfoi-app",
-  "version": "0.0.1",
-  "description": "Delphi technique is used for bringing values, new viewpoints and ideas as a foundation for planning and decision making, i.e. making qualitative research. Live Delphi application extends Delphi method with realtime data collection features",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Metatavu Oy",
-  "license": "AGPL-3.0",
-  "dependencies": {
-    "grunt": "^1.0.1",
-    "grunt-contrib-sass": "^1.0.0",
-    "grunt-wiredep": "^3.0.1",
-    "load-grunt-tasks": "^3.5.2",
-    "wiredep": "^4.0.0"
-  },
-  "devDependencies": {
-    "babel-preset-env": "^1.5.1",
-    "babel-preset-es2015": "^6.24.1",
-    "grunt-babel": "^6.0.0",
-    "grunt-contrib-pug": "^1.0.0"
-  }
+    "name": "live-delfoi-app",
+    "version": "0.0.1",
+    "description": "Delphi technique is used for bringing values, new viewpoints and ideas as a foundation for planning and decision making, i.e. making qualitative research. Live Delphi application extends Delphi method with realtime data collection features",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "Metatavu Oy",
+    "license": "AGPL-3.0",
+    "dependencies": {
+        "cordova-browser": "~4.1.0",
+        "cordova-ios": "^4.4.0",
+        "cordova-plugin-inappbrowser": "^1.7.1",
+        "cordova-plugin-whitelist": "^1.3.2",
+        "grunt": "^1.0.1",
+        "grunt-contrib-sass": "^1.0.0",
+        "grunt-wiredep": "^3.0.1",
+        "load-grunt-tasks": "^3.5.2",
+        "wiredep": "^4.0.0"
+    },
+    "devDependencies": {
+        "babel-preset-env": "^1.5.1",
+        "babel-preset-es2015": "^6.24.1",
+        "grunt-babel": "^6.0.0",
+        "grunt-contrib-pug": "^1.0.0"
+    },
+    "cordova": {
+        "platforms": [
+            "browser",
+            "ios"
+        ],
+        "plugins": {
+            "cordova-plugin-inappbrowser": {},
+            "cordova-plugin-whitelist": {}
+        }
+    }
 }
