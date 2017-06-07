@@ -1,4 +1,4 @@
-/* global window, document, WebSocket, MozWebSocket, $, _, bootbox*/
+/* global window, document, WebSocket, MozWebSocket, $, _, bootbox, moment*/
 (function() {
   'use strict';
   
@@ -8,11 +8,22 @@
       this.currentQuery = null;
       $(this.element).on('click', '.select-query-btn', (e) => { this._onQueryElementClick(e); });
       $(this.element).on('click', '.query-selection', (e) => { this._onToQuerySelectionClick(e); });
+      setInterval(() => { this._removeEndedQueries() }, 100);
     },
     
     _onToQuerySelectionClick: function(event) {
       $('.chart-view').slideUp(400, () => {
         $('.query-view').slideDown(400);
+      });
+    },
+    
+    _removeEndedQueries: function() {
+      $.each($('.select-query-btn'), (index, element ) => {
+      let queryEnds = $(element).attr('data-query-ends');
+        let endingMoment = moment(queryEnds);
+        if (queryEnds && endingMoment.isBefore(moment())) {
+          $(element).parent().remove();
+        }
       });
     },
     
@@ -45,18 +56,24 @@
     },
     
     renderQueryElement: function(data) {
-      const queryElement = $('<li>')
-        .addClass('list-group-item')
-        .append(
-          $('<a>')
-            .addClass('select-query-btn')
-            .attr('href', '#')
-            .attr('data-thesis', data.thesis)
-            .attr('data-query-id', data.id)
-            .text(data.name)
-        );
+      const existingQueryElement = $('a[data-query-id="'+ data.id +'"]');
+      if (existingQueryElement.length > 0) {
+        existingQueryElement.text(data.name);
+      } else {
+        const queryElement = $('<li>')
+          .addClass('list-group-item')
+          .append(
+            $('<a>')
+              .addClass('select-query-btn')
+              .attr('href', '#')
+              .attr('data-thesis', data.thesis)
+              .attr('data-query-id', data.id)
+              .attr('data-query-ends', data.ends)
+              .text(data.name)
+          );
 
-      $('.available-queries').append(queryElement);
+        $('.available-queries').append(queryElement);
+      }
     }
   });
   

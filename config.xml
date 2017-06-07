@@ -9,6 +9,8 @@
     <access origin="https://auth.metatavu.io" />
     <access origin="https://cdn.metatavu.io" />
     <access origin="http://live-dev.edelphi.org:8000" />
+    <access origin="https://live.edelphi.org" />
+    <access origin="http://localhost:8000" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="ws://*/*" />
@@ -16,4 +18,5 @@
     <preference name="orientation" value="portrait" />
     <preference name="target-device" value="handset" />
     <engine name="browser" spec="~4.1.0" />
+    <plugin name="cordova-plugin-inappbrowser" spec="~1.7.1" />
 </widget>

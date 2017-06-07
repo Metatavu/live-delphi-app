@@ -71,8 +71,13 @@ module.exports = function(grunt) {
           ext: '.js'
         }]
       }
+    },
+    wiredep: {
+      target: {
+        src: 'www/index.html' // point to your HTML file.
+      }
     }
   });
   
-  grunt.registerTask('default', [ 'sass', 'pug', 'generate-config', 'babel' ]);
+  grunt.registerTask('default', [ 'sass', 'pug', 'generate-config', 'babel', 'wiredep' ]);
 };
