@@ -1,12 +1,12 @@
 {
   "server": {
-    "host": "live-dev.edelphi.org",
-    "port": 8000,
-    "secure": false
+    "host": "live.edelphi.org",
+    "port": 443,
+    "secure": true
   },
   "generic": {
-    "defaultSrc": "'self' http: https: data: gap: ws: wss: https://ssl.gstatic.com *.metatavu.io *.edelphi.org:* 'unsafe-inline'",
-    "styleSrc": "'self' http: https: *.metatavu.io *.edelphi.org:* 'unsafe-inline'",
+    "defaultSrc": "'self' http: https: data: gap: ws: wss: https://ssl.gstatic.com *.metatavu.io *.edelphi.org 'unsafe-inline'",
+    "styleSrc": "'self' http: https: *.metatavu.io *.edelphi.org 'unsafe-inline'",
     "mediaSrc": "*"
   }
 }
