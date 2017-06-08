@@ -18,6 +18,9 @@
       this._series = [];
       this.currentX  = 0;
       this.currentY = 0;
+      const chartWidth = $(this.element).parent().width();
+      $(this.element).css('width', chartWidth);
+      $(this.element).css('height', chartWidth);
       
       this._scatterChart = new Chart(this.element, {
         type: 'line',

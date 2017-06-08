@@ -40,6 +40,10 @@
       return this.element.liveDelphiAuth('sessionId');
     },
 
+    createChart: function() {
+      $("#chart").liveDelphiChart();
+    },
+
     _onAuthenticated: function () {
       this.element.liveDelphiAuth('join');
     },
@@ -50,7 +54,7 @@
     },
     
     _onConnect: function (event, data) {
-      $("#chart").liveDelphiChart();
+      
     },
     
     _onMessageQueryFound: function(event, data) {

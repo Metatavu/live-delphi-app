@@ -40,7 +40,9 @@
       if (this.currentQuery) {
         $('.swiper-slide').remove();
         $('.query-view').slideUp(400, () => {
-          $('.chart-view').slideDown(400);
+          $('.chart-view').slideDown(400, () => {
+            $(document.body).liveDelphi('createChart');
+          });
         });
 
         $(document.body).liveDelphiClient('joinQuery', $(document.body).liveDelphi('sessionId'), this.currentQuery);
