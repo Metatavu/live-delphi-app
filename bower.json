@@ -24,8 +24,8 @@
     "moment-with-locales": "https://cdn.metatavu.io/libs/moment/2.17.1/moment-with-locales.js",
     "bootstrap.min.js": "https://cdn.metatavu.io/libs/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js",
     "bootbox.min": "https://cdn.metatavu.io/libs/bootbox-js/4.4.0/bootbox.min.js",
-    "Chart.min": "https://cdn.metatavu.io/libs/chart-js/2.5.0/Chart.min.js",
     "swiper.jquery.min": "https://cdn.metatavu.io/libs/swiper/3.4.2/js/swiper.jquery.min.js",
-    "bootstrap.min": "https://cdn.metatavu.io/libs/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
+    "bootstrap.min": "https://cdn.metatavu.io/libs/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css",
+    "chart.js": "^2.6.0"
   }
 }
