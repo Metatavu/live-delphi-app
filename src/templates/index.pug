@@ -13,6 +13,7 @@ html
     script(src="cordova.js",type="text/javascript")
     // bower:js 
     // endbower 
+
     script(src='https://auth.metatavu.io/auth/js/keycloak.js',type='text/javascript')
     script(src='js/config.js')
     script(src='js/live-delphi-auth.js')
@@ -23,26 +24,29 @@ html
     script(src='js/live-delphi.js')
     title Live Delphi
   body
-    nav.navbar.navbar-toggleable-md.navbar-light.bg-faded
-      button.navbar-toggler.navbar-toggler-right(type='button', data-toggle='collapse', data-target='#navbarContent', aria-controls='navbarSupportedContent', aria-expanded='false', aria-label='Toggle navigation')
-        span.navbar-toggler-icon
-      a.navbar-brand(href='#') LiveDelfoi
-      #navbarContent.collapse.navbar-collapse
-        ul.navbar-nav.mr-auto
-          li.nav-item.active
-            a.nav-link.query-selection(href='#') Back to query selection
-          li.nav-item
-            a.nav-link(href='#') Settings
-    .container.chart-view
-      .row.chart-row
-        .chart-container
-          canvas#chart
-      .row.query-row
-        p.query-thesis
-      .row.chat-row
-        .swiper-container
-          .swiper-wrapper
-    .container.query-view
-      .row
-        .query-container
-          ul.available-queries.list-group
+    .body-wrapper
+      nav.navbar.navbar-toggleable-md.navbar-light.bg-faded
+        button.navbar-toggler.navbar-toggler-right(type='button', style="color:#fff", data-toggle='collapse', data-target='#navbarContent', aria-controls='navbarSupportedContent', aria-expanded='false', aria-label='Toggle navigation')
+          span.navbar-toggler-icon(style="color:#fff")
+        a.navbar-brand.custom-brand(href='#') LiveDelfoi
+        #navbarContent.collapse.navbar-collapse
+          ul.navbar-nav.mr-auto
+            li.nav-item.active
+              a.nav-link.query-selection(href='#')
+                | Back to query selection 
+                span.glyphicon.glyphicon-menu-right(aria-hidden='true')
+            li.nav-item
+              a.nav-link(href='#') Settings
+      .container.chart-view
+        .row.chart-row
+          .chart-container
+            canvas#chart
+        .row.query-row
+          p.query-thesis
+        .row.chat-row
+          .swiper-container
+            .swiper-wrapper
+      .container.query-view
+        .row
+          .query-container
+            ul.available-queries.list-group
