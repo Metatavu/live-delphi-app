@@ -104,6 +104,21 @@
       var xValue = ((x - chartLeft) / chartRight) * this.options.maxX;
       var yValue = this.options.maxY - (((y - chartTop) / chartBottom) * this.options.maxY);
 
+      if (yValue > 6) {
+        yValue = 6;
+      }
+      
+      if (yValue < 0) {
+        yValue = 0;
+      }
+      
+      if (xValue > 6) {
+        xValue = 6;
+      }
+      
+      if (xValue < 0) {
+        xValue = 0.05;
+      }
       $(document.body).liveDelphiClient('sendMessage', {
         'type': 'answer',
         'x': xValue,
