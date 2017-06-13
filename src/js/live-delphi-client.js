@@ -21,7 +21,7 @@
       
       this._webSocket = this._createWebSocket(sessionId);
       if (!this._webSocket) {
-        // Handle error  
+        // Handle error
         return;
       } 
       
@@ -67,7 +67,7 @@
     
     _reconnect: function () {
       console.log("Reconnecting...");
-
+      
       if (this._reconnectTimeout) {
         clearTimeout(this._reconnectTimeout);
       }
@@ -78,6 +78,8 @@
       
       this._reconnectTimeout = setTimeout($.proxy(function () {
         console.log("timeout socket state: " + this._webSocket.readyState);
+        
+        this.element.liveDelphiAuth('join');
         
         if (this._webSocket.readyState === this._webSocket.CLOSED) {
           this._reconnect();
