@@ -118,7 +118,7 @@ body {
       height: 135px;
   }
   .swiper-slide {
-      background: #fff;
+      background: #132840;
       display: -webkit-box;
       display: -ms-flexbox;
       display: -webkit-flex;
@@ -140,13 +140,14 @@ body {
       width: 80px;
       height: 80px;
       border-radius: 50%;
+      border: 1px solid #F8F8F8;
       display: inline-block;
       position: absolute;
       margin-left: -60px;
       margin-top: -8px;
-      -webkit-box-shadow: 3px 3px 5px 0px rgba(145,145,145,1);
-      -moz-box-shadow: 3px 3px 5px 0px rgba(145,145,145,1);
-      box-shadow: 3px 3px 5px 0px rgba(145,145,145,1);
+      -webkit-box-shadow: 1px 1px 5px 0px rgba(145,145,145,1);
+      -moz-box-shadow: 1px 1px 5px 0px rgba(145,145,145,1);
+      box-shadow: 1px 1px 5px 0px rgba(145,145,145,1);
     }
 
     .comment-text {
@@ -159,9 +160,9 @@ body {
       padding-bottom: 5px;
       display: inline-block;
       width: 150px;
-      -webkit-box-shadow: 3px 3px 5px 0px rgba(145,145,145,1);
-      -moz-box-shadow: 3px 3px 5px 0px rgba(145,145,145,1);
-      box-shadow: 3px 3px 5px 0px rgba(145,145,145,1);
+      -webkit-box-shadow: 1px 1px 5px 0px rgba(145,145,145,1);
+      -moz-box-shadow: 1px 1px 5px 0px rgba(145,145,145,1);
+      box-shadow: 1px 1px 5px 0px rgba(145,145,145,1);
 
       p {
         font-size: 12px;

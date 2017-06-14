@@ -140,15 +140,20 @@
       this.currentX = data.x;
       this.currentY = data.y;
       
+      const newData = {
+        x: data.x > 6 ?  6 : data.x < 0 ?  0.05 : data.x,
+        y: data.y > 6 ?  6 : data.y < 0 ?  0 : data.y
+      };
+      
       var index = this._userHashes.indexOf(userHash);
       if (index !== -1) {
         var lastUpdated = new Date().getTime();
-        this._series[index].data[0] = data;
+        this._series[index].data[0] = newData;
         this._series[index].pointBackgroundColor = this.getColor(data, lastUpdated);
         this._series[index].lastUpdated = lastUpdated;
       } else {
         this._userHashes.push(userHash);
-        this._series.push(this._getDataSet(data));
+        this._series.push(this._getDataSet(newData));
       }
       
       this._updateChart();
