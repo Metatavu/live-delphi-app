@@ -37,8 +37,7 @@
 
     _onCommentContainerClick: function(event) {
       const commentContainer = $(event.target).parents('.comment-container');
-      this.openComment = commentContainer.attr('data-comment-id');
-      console.log(commentContainer);
+      this.openComment = parseInt(commentContainer.attr('data-comment-id'));
       $(document.body).liveDelphiClient('sendMessage', {
         'type': 'comment-opened',
         'commentId': this.openComment
