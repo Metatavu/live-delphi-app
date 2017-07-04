@@ -8,7 +8,7 @@
       this.currentQuery = null;
       $(this.element).on('click', '.select-query-btn', (e) => { this._onQueryElementClick(e); });
       $(this.element).on('click', '.query-selection', (e) => { this._onToQuerySelectionClick(e); });
-      setInterval(() => { this._removeEndedQueries() }, 100);
+      setInterval(() => { this._removeEndedQueries(); }, 100);
     },
     
     _onToQuerySelectionClick: function(event) {

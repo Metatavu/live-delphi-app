@@ -36,6 +36,17 @@
           },
           scales: {
             xAxes: [{
+              gridLines: {
+                lineWidth: [1, 1, 1, 2, 1, 1],
+                color: [
+                  'rgba(0, 0, 0, 0.1)',
+                  'rgba(0, 0, 0, 0.1)',
+                  'rgba(0, 0, 0, 0.1)',
+                  'rgba(0, 0, 0, 0.3)',
+                  'rgba(0, 0, 0, 0.1)',
+                  'rgba(0, 0, 0, 0.1)'
+                ]
+              },
               type: 'linear',
               position: 'bottom',
               ticks: {
@@ -48,6 +59,17 @@
               }
             }],
             yAxes: [{
+              gridLines: {
+                lineWidth: [1, 1, 1, 2, 1, 1],
+                color: [
+                  'rgba(0, 0, 0, 0.1)',
+                  'rgba(0, 0, 0, 0.1)',
+                  'rgba(0, 0, 0, 0.1)',
+                  'rgba(0, 0, 0, 0.3)',
+                  'rgba(0, 0, 0, 0.1)',
+                  'rgba(0, 0, 0, 0.1)'
+                ]
+              },
               type: 'linear',
               ticks: {
                 mirror: true,
