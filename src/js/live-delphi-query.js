@@ -55,13 +55,17 @@
       }
     },
     
-    getQueries: function() {
+    getQueries: function() {   
+      $('.query-container').addClass('loading');
+      
       $(document.body).liveDelphiClient('sendMessage', {
         'type': 'get-queries'
       });
     },
     
     renderQueryElement: function(data) {
+      $('.query-container').removeClass('loading');
+      
       const existingQueryElement = $('a[data-query-id="'+ data.id +'"]');
       if (existingQueryElement.length > 0) {
         existingQueryElement.text(data.name);

@@ -81,9 +81,23 @@ body {
 }
 
 .query-view {
+  
   .query-container {
     width: 100%;
     padding: 10px;
+    
+    &.loading::before {
+      background-image: url("../images/loader.svg");
+      background-repeat: no-repeat;
+      height: 60px;
+      z-index: 15;
+      margin-top: 0;
+      width: 90%; 
+      background-position: center;
+      content: "";
+      display: block;
+      position: absolute;
+    }
     
     a {
      color: #000;
@@ -93,6 +107,19 @@ body {
 
 .chart-view {
   display: none;
+  
+  .loader {
+    background-image: url("../images/loader.svg");
+    background-repeat: no-repeat;
+    height: 60px;
+    z-index: 15;
+    margin-top: 100px;
+    width: 90%; 
+    background-position: center;
+    content: "";
+    display: none;
+    position: absolute;
+  }
 
   .query-row {
     width: 100%;

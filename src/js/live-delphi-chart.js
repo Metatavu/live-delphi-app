@@ -159,6 +159,7 @@
     },
     
     userData: function (userHash, data) {
+      $('.loader').fadeOut(100);
       this.currentX = data.x;
       this.currentY = data.y;
       

@@ -41,6 +41,7 @@
     },
 
     createChart: function() {
+      $('.loader').fadeIn();
       $("#chart").liveDelphiChart();
     },
 
@@ -62,6 +63,7 @@
     },
     
     _onMessageAnswerChanged: function (event, data) {
+      $('.chart-container').removeClass('loading');
       $("#chart").liveDelphiChart('userData', data.userHash, {
         x: data.x,
         y: data.y
