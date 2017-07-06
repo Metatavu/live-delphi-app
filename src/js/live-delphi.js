@@ -16,7 +16,8 @@
 
       this.element.on('authenticated', $.proxy(this._onAuthenticated, this));
       this.element.on('joined', $.proxy(this._onJoined, this));
-      this.element.on('connect', $.proxy(this._onConnect, this));
+      $(document.body).on('connect', $.proxy(this._onConnect, this));
+      $(document.body).on('reconnect', $.proxy(this._onReconnect, this));
       this.element.on('message:answer-changed', $.proxy(this._onMessageAnswerChanged, this));
       this.element.on('message:comment-added', $.proxy(this._onMessageCommentAdded, this));
       this.element.on('message:query-found', $.proxy(this._onMessageQueryFound, this));
@@ -41,7 +42,7 @@
     },
 
     createChart: function() {
-      $('.loader').fadeIn();
+      $(".chart-container").append('<canvas id="chart"></canvas>');
       $("#chart").liveDelphiChart();
     },
 
@@ -55,7 +56,11 @@
     },
     
     _onConnect: function (event, data) {
-      
+      $('.connecting-modal').hide();
+    },
+    
+    _onReconnect: function () {
+      $('.connecting-modal').show();
     },
     
     _onMessageQueryFound: function(event, data) {
