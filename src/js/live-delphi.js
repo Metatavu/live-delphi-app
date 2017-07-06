@@ -19,6 +19,7 @@
       $(document.body).on('connect', $.proxy(this._onConnect, this));
       $(document.body).on('reconnect', $.proxy(this._onReconnect, this));
       this.element.on('message:answer-changed', $.proxy(this._onMessageAnswerChanged, this));
+      this.element.on('message:answers-not-found', $.proxy(this._onEmptyAnswerResponse, this));
       this.element.on('message:comment-added', $.proxy(this._onMessageCommentAdded, this));
       this.element.on('message:query-found', $.proxy(this._onMessageQueryFound, this));
       
@@ -43,6 +44,7 @@
 
     createChart: function() {
       $(".chart-container").append('<canvas id="chart"></canvas>');
+      $('.loader').fadeIn();
       $("#chart").liveDelphiChart();
     },
 
@@ -68,12 +70,16 @@
     },
     
     _onMessageAnswerChanged: function (event, data) {
-      $('.chart-container').removeClass('loading');
+      $('.loader').fadeOut();
       $("#chart").liveDelphiChart('userData', data.userHash, {
         x: data.x,
         y: data.y
       });
     },
+    
+    _onEmptyAnswerResponse: function () {
+      $('.loader').fadeOut();
+    },    
     
     _onMessageCommentAdded: function (event, data) {
       const color = $("#chart").liveDelphiChart('getColor', {

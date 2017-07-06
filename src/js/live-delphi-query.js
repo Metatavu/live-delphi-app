@@ -16,6 +16,7 @@
       $('.chart-view').slideUp(400, () => {
         $('.query-view').slideDown(400);
       });
+      $("#chart").remove();
     },
     
     _removeEndedQueries: function() {
@@ -42,7 +43,6 @@
         $('.swiper-slide').remove();
         $('.query-view').slideUp(400, () => {
           $('.chart-view').slideDown(400, () => {
-            $("#chart").remove();
             $(document.body).liveDelphi('createChart');
             $(document.body).liveDelphiClient('sendMessage', {
               'type': 'join-query'
