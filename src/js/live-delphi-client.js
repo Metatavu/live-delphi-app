@@ -1,4 +1,5 @@
 /* global window, document, WebSocket, MozWebSocket, $, _*/
+/* jshint esversion:6 */
 (function() {
   'use strict';
   
