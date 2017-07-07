@@ -16,7 +16,6 @@
       $('.chart-view').slideUp(400, () => {
         $('.query-view').slideDown(400);
       });
-      $("#chart").remove();
     },
     
     _removeEndedQueries: function() {
@@ -31,11 +30,24 @@
     
     _onQueryElementClick: function(event) {
       event.preventDefault();
+      $("#chart").remove();
       $('.list-group-item').removeClass('active');
       $(event.target).parent().addClass('active');
       $('.query-thesis').text($(event.target).attr('data-thesis'));
+      
+      this.labelx = $(event.target).attr('data-label-x');
+      this.labely = $(event.target).attr('data-label-y');
       this.currentQuery = $(event.target).attr('data-query-id');
       this.joinQuery();
+    },
+    
+    getCurrentQueryLabels: function () {
+      const labels = {
+        labelx: this.labelx,
+        labely: this.labely
+      };
+      
+      return labels;
     },
     
     joinQuery: function() {
@@ -79,6 +91,8 @@
               .attr('href', '#')
               .attr('data-thesis', data.thesis)
               .attr('data-query-id', data.id)
+              .attr('data-label-y', data.labely)
+              .attr('data-label-x', data.labelx)
               .attr('data-query-ends', data.ends)
               .text(data.name)
           );

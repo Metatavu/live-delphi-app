@@ -43,7 +43,10 @@
     },
 
     createChart: function() {
-      $(".chart-container").append('<canvas id="chart"></canvas>');
+      if (!$("#canvas").length > 0) {
+        $(".chart-container").append('<canvas id="chart"></canvas>');
+      }
+      
       $('.loader').fadeIn();
       $("#chart").liveDelphiChart();
     },

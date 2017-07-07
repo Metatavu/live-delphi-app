@@ -14,6 +14,7 @@
     },
     
     _create : function() {
+      this.labels = $(document.body).liveDelphiQuery('getCurrentQueryLabels');
       this._userHashes = [];
       this._series = [];
       this.currentX  = 0;
@@ -36,6 +37,10 @@
           },
           scales: {
             xAxes: [{
+              scaleLabel: {
+                display: true,
+                labelString: this.labels.labelx
+              },
               gridLines: {
                 lineWidth: [1, 1, 1, 2, 1, 1],
                 color: [
@@ -59,6 +64,10 @@
               }
             }],
             yAxes: [{
+              scaleLabel: {
+                display: true,
+                labelString: this.labels.labely
+              },
               gridLines: {
                 lineWidth: [1, 1, 1, 2, 1, 1],
                 color: [
