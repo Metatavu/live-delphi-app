@@ -1,3 +1,8 @@
 body {
   padding-top: 20px;
 }
+
+.query-view.query-container::before,
+.chart-view::before{
+  background-image: url("../gfx/loader.gif");
+}

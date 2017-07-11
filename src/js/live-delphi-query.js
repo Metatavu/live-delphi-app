@@ -1,3 +1,4 @@
+/* jshint esversion: 6 */
 /* global window, document, WebSocket, MozWebSocket, $, _, bootbox, moment*/
 (function() {
   'use strict';
@@ -8,7 +9,7 @@
       this.currentQuery = null;
       $(this.element).on('click', '.select-query-btn', (e) => { this._onQueryElementClick(e); });
       $(this.element).on('click', '.query-selection', (e) => { this._onToQuerySelectionClick(e); });
-      setInterval(() => { this._removeEndedQueries() }, 100);
+      setInterval(() => { this._removeEndedQueries(); }, 100);
     },
     
     _onToQuerySelectionClick: function(event) {
@@ -29,11 +30,24 @@
     
     _onQueryElementClick: function(event) {
       event.preventDefault();
+      $("#chart").remove();
       $('.list-group-item').removeClass('active');
       $(event.target).parent().addClass('active');
       $('.query-thesis').text($(event.target).attr('data-thesis'));
+      
+      this.labelx = $(event.target).attr('data-label-x');
+      this.labely = $(event.target).attr('data-label-y');
       this.currentQuery = $(event.target).attr('data-query-id');
       this.joinQuery();
+    },
+    
+    getCurrentQueryLabels: function () {
+      const labels = {
+        labelx: this.labelx,
+        labely: this.labely
+      };
+      
+      return labels;
     },
     
     joinQuery: function() {
@@ -54,13 +68,17 @@
       }
     },
     
-    getQueries: function() {
+    getQueries: function() {   
+      $('.query-container').addClass('loading');
+      
       $(document.body).liveDelphiClient('sendMessage', {
         'type': 'get-queries'
       });
     },
     
     renderQueryElement: function(data) {
+      $('.query-container').removeClass('loading');
+      
       const existingQueryElement = $('a[data-query-id="'+ data.id +'"]');
       if (existingQueryElement.length > 0) {
         existingQueryElement.text(data.name);
@@ -73,6 +91,8 @@
               .attr('href', '#')
               .attr('data-thesis', data.thesis)
               .attr('data-query-id', data.id)
+              .attr('data-label-y', data.labely)
+              .attr('data-label-x', data.labelx)
               .attr('data-query-ends', data.ends)
               .text(data.name)
           );

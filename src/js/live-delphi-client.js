@@ -1,4 +1,5 @@
 /* global window, document, WebSocket, MozWebSocket, $, _*/
+/* jshint esversion: 6 */
 (function() {
   'use strict';
   
@@ -7,16 +8,25 @@
     options: {
       serverUrl: 'http://localhost:8000',
       wsUrl: 'ws://localhost:8000',
-      reconnectTimeout: 3000
+      reconnectTimeout: 3000,
+      pingThreshold: 10000,
+      logDebug: false
     },
     
     _create : function() {
       this._state = null;
       this._pendingMessages = [];
       this._queryId = null;
+      this._pong = null;
+      
+      setInterval($.proxy(this._ping, this, 1000));
     },
     
     connect: function (sessionId) {
+      if (this.options.logDebug) {
+        console.log(`Connecting ${sessionId}...`);
+      }
+      
       this._state = 'CONNECTING';
       
       this._webSocket = this._createWebSocket(sessionId);
@@ -61,28 +71,52 @@
         }); 
       }, this))
       .fail( $.proxy(function () {
-        callback("error");
+        if (this.options.logDebug) {
+          console.log("error");
+        }
       }, this));
     },
     
-    _reconnect: function () {
-      console.log("Reconnecting...");
+    _ping: function () {
+      if (this._state === 'CONNECTED') {
+        this.sendMessage({
+          'type': 'ping'
+        });
+        
+        if (this._pong && (this._pong < (new Date().getTime() - this.options.pingThreshold))) {
+          try {
+            this._webSocket.close(); 
+          } catch (e) { }
+        }
+      }
+    },
+    
+    _reconnect: function (reason) {
+      this.element.trigger("reconnect", { });
+      this._pong = null;
+      this._state = 'RECONNECTING';
+
+      if (this.options.logDebug) {
+        console.log(`Reconnecting... (${reason})`);
+      }
       
       if (this._reconnectTimeout) {
         clearTimeout(this._reconnectTimeout);
       }
       
       if (!this._webSocket || this._webSocket.readyState !== this._webSocket.CONNECTING) {
-        this.connect();
+        this.connect($(document.body).liveDelphiAuth('sessionId'));
       }
       
       this._reconnectTimeout = setTimeout($.proxy(function () {
-        console.log("timeout socket state: " + this._webSocket.readyState);
+        if (this.options.logDebug) {
+          console.log("timeout socket state: " + this._webSocket.readyState);
+        }
         
         this.element.liveDelphiAuth('join');
         
         if (this._webSocket.readyState === this._webSocket.CLOSED) {
-          this._reconnect();
+          this._reconnect('Reconnect timeout');
         }
       }, this), this.options.reconnectTimeout);
     },
@@ -120,17 +154,19 @@
     
     _onWebSocketMessage: function (event) {
       const message = JSON.parse(event.data);
-      this.element.trigger("message:" + message.type, message.data); 
+      if (message.type === 'pong') {
+        this._pong = new Date().getTime(); 
+      } else {
+        this.element.trigger("message:" + message.type, message.data); 
+      }
     },
     
     _onWebSocketClose: function (event) {
-      console.log("Socket closed");
-      this._reconnect();
+      this._reconnect("Socket closed");
     },
     
     _onWebSocketError: function (event) {
-      console.log("Socket error");
-      this._reconnect();
+      this._reconnect("Socket error");
     }
     
   });
