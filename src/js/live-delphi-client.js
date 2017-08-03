@@ -1,5 +1,5 @@
-/* global window, document, WebSocket, MozWebSocket, $, _*/
 /* jshint esversion: 6 */
+/* global window, document, WebSocket, MozWebSocket, $, _*/
 (function() {
   'use strict';
   
@@ -18,7 +18,11 @@
       this._pendingMessages = [];
       this._queryId = null;
       this._pong = null;
-      
+      this._onWebSocketMessageRef = $.proxy(this._onWebSocketMessage, this);
+      this._onWebSocketCloseRef = $.proxy(this._onWebSocketClose, this);
+      this._onWebSocketErrorRef = $.proxy(this._onWebSocketError, this);
+      this._onWebSocketOpenRef = $.proxy(this._onWebSocketOpen, this);
+       
       setInterval($.proxy(this._ping, this, 1000));
     },
     
@@ -31,25 +35,24 @@
       
       this._webSocket = this._createWebSocket(sessionId);
       if (!this._webSocket) {
-        // Handle error
         return;
       } 
       
       switch (this._webSocket.readyState) {
         case this._webSocket.CONNECTING:
-          this._webSocket.onopen = $.proxy(this._onWebSocketOpen, this);
+          this._webSocket.onopen = this._onWebSocketOpenRef;
         break;
         case this._webSocket.OPEN:
           this._onWebSocketOpen();
         break;
         default:
-          this._reconnect();
+          this._reconnect(`Ready state ${this._webSocket.readyState}`);
         break;
       }
       
-      this._webSocket.onmessage = $.proxy(this._onWebSocketMessage, this);
-      this._webSocket.onclose = $.proxy(this._onWebSocketClose, this);
-      this._webSocket.onerror = $.proxy(this._onWebSocketError, this);
+      this._webSocket.onmessage = this._onWebSocketMessageRef;
+      this._webSocket.onclose = this._onWebSocketCloseRef;
+      this._webSocket.onerror = this._onWebSocketErrorRef;
     },
     
     sendMessage: function (data) {
@@ -99,7 +102,7 @@
       if (this.options.logDebug) {
         console.log(`Reconnecting... (${reason})`);
       }
-      
+          
       if (this._reconnectTimeout) {
         clearTimeout(this._reconnectTimeout);
       }
@@ -116,7 +119,7 @@
         this.element.liveDelphiAuth('join');
         
         if (this._webSocket.readyState === this._webSocket.CLOSED) {
-          this._reconnect('Reconnect timeout');
+          this._reconnect(`Reconnect timeout`);
         }
       }, this), this.options.reconnectTimeout);
     },
@@ -148,8 +151,9 @@
       this._state = 'CONNECTED';
       
       this.element.trigger("connect", { }); 
-      
-      console.log("Connected");
+      if (this.options.logDebug) {
+        console.log("Connected");
+      }
     },
     
     _onWebSocketMessage: function (event) {
