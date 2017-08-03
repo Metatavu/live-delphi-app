@@ -60,6 +60,10 @@
     },
     
     joinQuery: function (sessionId, queryId) {
+      this.element.trigger("before-join-query", { 
+        queryId: queryId
+      });
+      
       $.post(this.options.serverUrl + '/joinQuery/' + queryId, {
         sessionId: sessionId
       }, $.proxy(function (data) {

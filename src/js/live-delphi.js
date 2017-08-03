@@ -18,6 +18,9 @@
       this.element.on('joined', $.proxy(this._onJoined, this));
       $(document.body).on('connect', $.proxy(this._onConnect, this));
       $(document.body).on('reconnect', $.proxy(this._onReconnect, this));
+      $(document.body).on('before-join-query', $.proxy(this._onBeforeJoinQuery, this));
+      $(document.body).on('join-query', $.proxy(this._onJoinQuery, this));
+      
       this.element.on('message:answer-changed', $.proxy(this._onMessageAnswerChanged, this));
       this.element.on('message:answers-not-found', $.proxy(this._onEmptyAnswerResponse, this));
       this.element.on('message:comment-added', $.proxy(this._onMessageCommentAdded, this));
@@ -43,10 +46,8 @@
     },
 
     createChart: function() {
-      if (!$("#canvas").length) {
-        $(".chart-container").append('<canvas id="chart"></canvas>');
-      }
-      
+      $("#chart").remove();
+      $(".chart-container").append($('<canvas>').attr('id', 'chart'));
       $("#chart").liveDelphiChart();
     },
 
@@ -64,7 +65,17 @@
     },
     
     _onReconnect: function () {
+      $("#chart").remove();
+      $(".chart-container").addClass('loading');
       $('.connecting-modal').show();
+    },
+    
+    _onBeforeJoinQuery: function () {
+      $(".chart-container").addClass('loading');
+    },
+    
+    _onJoinQuery: function () {
+      $(".chart-container").removeClass('loading');
     },
     
     _onMessageQueryFound: function(event, data) {
