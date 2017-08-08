@@ -189,6 +189,7 @@
       
       this._updateChart();
     },
+    
     _updateChart: function  () {
       this._scatterChart.update();
     },
