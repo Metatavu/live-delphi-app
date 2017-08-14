@@ -1,6 +1,6 @@
 {
     "name": "live-delfoi-app",
-    "version": "0.0.1",
+    "version": "1.0.0",
     "description": "Delphi technique is used for bringing values, new viewpoints and ideas as a foundation for planning and decision making, i.e. making qualitative research. Live Delphi application extends Delphi method with realtime data collection features",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
