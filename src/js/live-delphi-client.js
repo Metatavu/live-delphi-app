@@ -59,31 +59,6 @@
       this._sendMessage(data);
     },
     
-    joinQuery: function (sessionId, queryId) {
-      this.element.trigger("before-join-query", { 
-        queryId: queryId
-      });
-      
-      $.post(this.options.serverUrl + '/joinQuery/' + queryId, {
-        sessionId: sessionId
-      }, $.proxy(function (data) {
-        this._queryId = queryId;
-        
-        this.sendMessage({
-          'type': 'join-query'
-        });
-        
-        this.element.trigger("join-query", { 
-          queryId: queryId
-        }); 
-      }, this))
-      .fail( $.proxy(function () {
-        if (this.options.logDebug) {
-          console.log("error");
-        }
-      }, this));
-    },
-    
     _ping: function () {
       if (this._state === 'CONNECTED') {
         this.sendMessage({

@@ -18,7 +18,9 @@ html
     // script(src='https://cdn.metatavu.io/libs/tools/debug/0.0.4/debug.js')
     script(src='https://auth.metatavu.io/auth/js/keycloak.js',type='text/javascript')
     script(src='js/config.js')
+    script(src='js/pug-templates.js')
     script(src='js/live-delphi-auth.js')
+    script(src='js/live-delphi-query-list.js')
     script(src='js/live-delphi-query.js')
     script(src='js/live-delphi-client.js')
     script(src='js/live-delphi-chart.js')
@@ -42,10 +44,14 @@ html
             li.nav-item
               a.nav-link(href='#', data-toggle="collapse", data-target=".navbar-collapse.show") Settings
       .container.chart-view
-        .loader
         .row.chart-row
           .chart-container
-            canvas#chart
+            .chart-label.chart-label-left
+              .chart-label-inner
+            .chart-canvas-container
+              canvas#chart(width="400", height="400")
+            .chart-label.chart-label-bottom
+              .chart-label-inner
         .row.query-row
           p.query-thesis
         .row.chat-row

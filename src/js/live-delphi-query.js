@@ -5,101 +5,144 @@
   
   $.widget("custom.liveDelphiQuery", {
     
-    _create: function() {
-      this.currentQuery = null;
-      $(this.element).on('click', '.select-query-btn', (e) => { this._onQueryElementClick(e); });
-      $(this.element).on('click', '.query-selection', (e) => { this._onToQuerySelectionClick(e); });
-      setInterval(() => { this._removeEndedQueries(); }, 100);
+    options: {
+      serverUrl: null,
+      logDebug: false
     },
     
-    _onToQuerySelectionClick: function(event) {
-      $('.chart-view').slideUp(400, () => {
-        $('.query-view').slideDown(400);
+    _create: function() {
+      this._queryId = null;
+      $(document.body).on('message:answer-changed', $.proxy(this._onMessageAnswerChanged, this));
+      $(document.body).on('message:answers-found', $.proxy(this._onMessageAnswersFound, this));
+      $(document.body).on('reconnect', $.proxy(this._onReconnect, this));
+      $(document.body).on('connect', $.proxy(this._onConnect, this));
+    },
+    
+    joinQuery: function(queryId, data) {
+      this._queryId = queryId;
+      this._labelX = data.labelX;
+      this._labelY = data.labelY;
+      this._thesis = data.thesis;
+      
+      $('.chart-label-left .chart-label-inner').text(this._labelY);
+      $('.chart-label-bottom .chart-label-inner').text(this._labelX);
+      $('.query-thesis').text(this._thesis);
+      
+      $("#chart").remove();
+      $('.swiper-slide').remove();
+      $('.query-view').slideUp(400, () => {
+        $('.chart-view').addClass('loading').show();
+        this._createChart();
+        const sessionId = $(document.body).liveDelphi('sessionId');
+        this._joinQuery(sessionId, this._queryId);
       });
     },
     
-    _removeEndedQueries: function() {
-      $.each($('.select-query-btn'), (index, element ) => {
-      let queryEnds = $(element).attr('data-query-ends');
-        let endingMoment = moment(queryEnds);
-        if (queryEnds && endingMoment.isBefore(moment())) {
-          $(element).parent().remove();
+    getQueryId: function () {
+      return this._queryId;
+    },
+    
+    getLabelX: function() {
+      return this._labelX;
+    },
+    
+    getLabelY: function() {
+      return this._labelY;
+    },
+    
+    getThesis: function() {
+      return this._thesis;
+    },
+
+    _createChart: function() {
+      $(".chart-canvas-container").append($('<canvas>').attr('id', 'chart'));
+      $("#chart").liveDelphiChart();
+    },
+    
+    _joinQuery: function (sessionId, queryId) {
+      $(document.body).trigger("before-join-query", { 
+        queryId: queryId
+      });
+      
+      $.post(this.options.serverUrl + '/joinQuery/' + queryId, {
+        sessionId: sessionId
+      }, $.proxy(function () {
+        this._queryId = queryId;
+        
+        $(document.body).trigger("join-query", { 
+          queryId: queryId
+        }); 
+        
+        this._loadExistingAnswers();
+        this._loadExistingRootComments();
+      }, this))
+      .fail($.proxy(function () {
+        if (this.options.logDebug) {
+          console.log("error");
+        }
+      }, this));
+    },
+    
+    _rejoinQuery: function () {
+      const sessionId = $(document.body).liveDelphi('sessionId');
+      $("#chart").liveDelphiChart('reset');
+      this._joinQuery(sessionId, this._queryId);
+    },
+    
+    _loadExistingAnswers: function (queryId) {
+      this.element.liveDelphiClient('sendMessage', {
+        'type': 'list-latest-answers',
+        'data': {
+          'queryId': this._queryId,
+          'before': new Date().getTime(),
+          'resultMode': 'batch'
         }
       });
     },
     
-    _onQueryElementClick: function(event) {
-      event.preventDefault();
-      $("#chart").remove();
-      $('.list-group-item').removeClass('active');
-      $(event.target).parent().addClass('active');
-      $('.query-thesis').text($(event.target).attr('data-thesis'));
-      
-      this.labelx = $(event.target).attr('data-label-x');
-      this.labely = $(event.target).attr('data-label-y');
-      this.currentQuery = $(event.target).attr('data-query-id');
-      this.joinQuery();
-    },
-    
-    getCurrentQueryLabels: function () {
-      const labels = {
-        labelx: this.labelx,
-        labely: this.labely
-      };
-      
-      return labels;
-    },
-    
-    joinQuery: function() {
-      if (this.currentQuery) {
-        $('.swiper-slide').remove();
-        $('.query-view').slideUp(400, () => {
-          $('.chart-view').slideDown(400, () => {
-            $(document.body).liveDelphi('createChart');
-            $(document.body).liveDelphiClient('sendMessage', {
-              'type': 'join-query'
-            });
-          });
-        });
-
-        $(document.body).liveDelphiClient('joinQuery', $(document.body).liveDelphi('sessionId'), this.currentQuery);
-      } else {
-        this.getQueries();
-      }
-    },
-    
-    getQueries: function() {   
-      $('.query-container').addClass('loading');
-      
-      $(document.body).liveDelphiClient('sendMessage', {
-        'type': 'get-queries'
+    _loadExistingRootComments: function (queryId) {
+      this.element.liveDelphiClient('sendMessage', {
+        'type': 'list-root-comments-by-query',
+        'data': {
+          'queryId': this._queryId
+        }
       });
     },
     
-    renderQueryElement: function(data) {
-      $('.query-container').removeClass('loading');
+    _onMessageAnswersFound: function (event, data) {
+      if (data.queryId === this.getQueryId()) {
+        $(".chart-view").removeClass('loading');
+        
+        const answers = data.answers;
+        
+        answers.forEach((answer) => {
+          $("#chart").liveDelphiChart('userData', data.userHash, {
+            x: answer.x,
+            y: answer.y
+          });
+        });
+      }
+    },
+    
+    _onMessageAnswerChanged: function (event, data) {
+      if (data.queryId === this.getQueryId()) {
+        $("#chart").liveDelphiChart('userData', data.userHash, {
+          x: data.x,
+          y: data.y
+        });
+      }
+    },
+    
+    _onReconnect: function () {
       
-      const existingQueryElement = $('a[data-query-id="'+ data.id +'"]');
-      if (existingQueryElement.length > 0) {
-        existingQueryElement.text(data.name);
-      } else {
-        const queryElement = $('<li>')
-          .addClass('list-group-item')
-          .append(
-            $('<a>')
-              .addClass('select-query-btn')
-              .attr('href', '#')
-              .attr('data-thesis', data.thesis)
-              .attr('data-query-id', data.id)
-              .attr('data-label-y', data.labely)
-              .attr('data-label-x', data.labelx)
-              .attr('data-query-ends', data.ends)
-              .text(data.name)
-          );
-
-        $('.available-queries').append(queryElement);
+    },
+    
+    _onConnect: function () {
+      if (this._queryId) {
+        this._rejoinQuery();
       }
     }
+    
   });
   
 })();

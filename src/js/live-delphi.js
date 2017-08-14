@@ -4,6 +4,11 @@
   'use strict';
   
   $.widget("custom.liveDelphi", { 
+    
+    options: {
+      logDebug: false
+    },
+    
     _create : function() {
       const serverConfig = getConfig().server;
       const secure = serverConfig.secure;
@@ -18,15 +23,15 @@
       this.element.on('joined', $.proxy(this._onJoined, this));
       $(document.body).on('connect', $.proxy(this._onConnect, this));
       $(document.body).on('reconnect', $.proxy(this._onReconnect, this));
-      $(document.body).on('before-join-query', $.proxy(this._onBeforeJoinQuery, this));
-      $(document.body).on('join-query', $.proxy(this._onJoinQuery, this));
-      
-      this.element.on('message:answer-changed', $.proxy(this._onMessageAnswerChanged, this));
+
       this.element.on('message:answers-not-found', $.proxy(this._onEmptyAnswerResponse, this));
       this.element.on('message:comment-added', $.proxy(this._onMessageCommentAdded, this));
-      this.element.on('message:query-found', $.proxy(this._onMessageQueryFound, this));
       
-      this.element.liveDelphiQuery();
+      this.element.liveDelphiQueryList();
+      this.element.liveDelphiQuery({
+        serverUrl: serverUrl,
+        logDebug: this.options.logDebug
+      });
       
       this.element.liveDelphiClient({
         wsUrl: wsUrl,
@@ -45,19 +50,13 @@
       return this.element.liveDelphiAuth('sessionId');
     },
 
-    createChart: function() {
-      $("#chart").remove();
-      $(".chart-container").append($('<canvas>').attr('id', 'chart'));
-      $("#chart").liveDelphiChart();
-    },
-
     _onAuthenticated: function () {
       this.element.liveDelphiAuth('join');
     },
     
     _onJoined: function () {
       this.element.liveDelphiClient('connect', this.sessionId());
-      this.element.liveDelphiQuery('joinQuery');
+      this.element.liveDelphiQueryList('listQueries');
     },
     
     _onConnect: function (event, data) {
@@ -65,33 +64,10 @@
     },
     
     _onReconnect: function () {
-      $("#chart").remove();
-      $(".chart-container").addClass('loading');
       $('.connecting-modal').show();
     },
     
-    _onBeforeJoinQuery: function () {
-      $(".chart-container").addClass('loading');
-    },
-    
-    _onJoinQuery: function () {
-      $(".chart-container").removeClass('loading');
-    },
-    
-    _onMessageQueryFound: function(event, data) {
-      this.element.liveDelphiQuery('renderQueryElement', data);
-    },
-    
-    _onMessageAnswerChanged: function (event, data) {
-      $('.loader').fadeOut();
-      $("#chart").liveDelphiChart('userData', data.userHash, {
-        x: data.x,
-        y: data.y
-      });
-    },
-    
     _onEmptyAnswerResponse: function () {
-      $('.loader').fadeOut();
     },    
     
     _onMessageCommentAdded: function (event, data) {
