@@ -26,6 +26,7 @@
       
       $('.chart-label-left .chart-label-inner').text(this._labelY);
       $('.chart-label-bottom .chart-label-inner').text(this._labelX);
+      $('.query-thesis').text(this._thesis);
       
       $("#chart").remove();
       $('.swiper-slide').remove();
