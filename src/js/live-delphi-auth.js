@@ -1,3 +1,4 @@
+/* jshint esversion: 6 */
 /* global window, document, WebSocket, MozWebSocket, $, _*/
 (function() {
   'use strict';
@@ -26,6 +27,15 @@
           console.error("Authentication failed", err);
           this.element.trigger("authentication-error");
         });
+    },
+    
+    logout: function () {
+      $.ajax({
+        url: this._keycloak.createLogoutUrl(),
+        complete: () => {
+          location.reload();
+        }
+      });
     },
     
     token: function () {
