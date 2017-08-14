@@ -148,7 +148,6 @@ body {
 
       .chart-canvas-container {
         position: relative;
-        width: 100%;
         background: #fff;
         margin-left: $chart-label-width;
         margin-right: $chart-label-width;
@@ -185,8 +184,7 @@ body {
           padding-bottom: $chart-label-width;
         }
       }
-    }
-    
+    } 
   }
 
   .swiper-container {
