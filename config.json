@@ -1,8 +1,8 @@
 {
   "server": {
-    "host": "localhost",
-    "port": 8000,
-    "secure": false
+    "host": "live.edelphi.org",
+    "port": 443,
+    "secure": true
   },
   "generic": {
     "defaultSrc": "'self' http: https: data: gap: ws: wss: https://ssl.gstatic.com *.metatavu.io *.edelphi.org 'unsafe-inline'",

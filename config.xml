@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="fi.metatavu.LiveDelphiApp" version="0.1.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="fi.metatavu.LiveDelphiApp" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Live Delphi</name>
     <description>Delphi technique is used for bringing values, new viewpoints and ideas as a foundation for planning and decision making, i.e. making qualitative research. Live Delphi application extends Delphi method with realtime data collection features</description>
     <author email="info@metatavu.fi" href="https://metatavu.fi">Metatavu Oy</author>
@@ -16,6 +16,7 @@
     <allow-intent href="wss://*/*" />
     <preference name="orientation" value="portrait" />
     <preference name="target-device" value="handset" />
+    <preference name="OverrideUserAgent" value="Mozilla/5.0 LiveDelphiApp" />
     <engine name="browser" spec="~4.1.0" />
     <engine name="ios" spec="^4.4.0" />
     <plugin name="cordova-plugin-inappbrowser" spec="^1.7.1" />

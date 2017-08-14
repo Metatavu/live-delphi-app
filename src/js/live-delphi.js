@@ -1,3 +1,4 @@
+/* jshint esversion: 6 */
 /* global getConfig */
 
 (function(){
@@ -10,6 +11,12 @@
     },
     
     _create : function() {
+      if (cordova.InAppBrowser) {
+        window.open = (url, target, options) => {
+          return cordova.InAppBrowser.open(url, target, options + ',zoom=no');
+        };
+      }
+      
       const serverConfig = getConfig().server;
       const secure = serverConfig.secure;
       const host = serverConfig.host;
@@ -44,6 +51,8 @@
       
       this.element.liveDelphiComment();
       this.element.liveDelphiAuth('authenticate'); 
+      
+      $(document).on('click', '.logout', $.proxy(this._onLogoutClick, this));
     },
     
     sessionId: function () {
@@ -81,6 +90,11 @@
       } else {
         this.element.liveDelphiComment('renderRootComment', color, data); 
       }
+    },
+    
+    _onLogoutClick: function (event) {
+      event.preventDefault();
+      this.element.liveDelphiAuth('logout');
     }
     
   });
