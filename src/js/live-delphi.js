@@ -57,8 +57,6 @@
     _onJoined: function () {
       this.element.liveDelphiClient('connect', this.sessionId());
       this.element.liveDelphiQueryList('listQueries');
-      
-      // this.element.liveDelphiQuery('joinQuery');
     },
     
     _onConnect: function (event, data) {
