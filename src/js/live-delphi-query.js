@@ -116,7 +116,7 @@
         const answers = data.answers;
         
         answers.forEach((answer) => {
-          $("#chart").liveDelphiChart('userData', data.userHash, {
+          $("#chart").liveDelphiChart('userData', answer.userHash, {
             x: answer.x,
             y: answer.y
           });
