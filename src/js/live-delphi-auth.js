@@ -28,6 +28,15 @@
         });
     },
     
+    logout: function () {
+      $.ajax({
+        url: this._keycloak.createLogoutUrl(),
+        complete: () => {
+          location.reload();
+        }
+      });
+    },
+    
     token: function () {
       return this._keycloak.token;
     },
