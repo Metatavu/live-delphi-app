@@ -73,6 +73,7 @@
         }); 
         
         this._loadExistingAnswers();
+        this._loadExistingRootComments();
       }, this))
       .fail($.proxy(function () {
         if (this.options.logDebug) {
@@ -94,6 +95,15 @@
           'queryId': this._queryId,
           'before': new Date().getTime(),
           'resultMode': 'batch'
+        }
+      });
+    },
+    
+    _loadExistingRootComments: function (queryId) {
+      this.element.liveDelphiClient('sendMessage', {
+        'type': 'list-root-comments-by-query',
+        'data': {
+          'queryId': this._queryId
         }
       });
     },
