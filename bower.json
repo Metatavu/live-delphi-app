@@ -26,6 +26,7 @@
     "bootbox.min": "https://cdn.metatavu.io/libs/bootbox-js/4.4.0/bootbox.min.js",
     "swiper.jquery.min": "https://cdn.metatavu.io/libs/swiper/3.4.2/js/swiper.jquery.min.js",
     "bootstrap.min": "https://cdn.metatavu.io/libs/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css",
-    "chart.js": "^2.6.0"
+    "chart.js": "^2.6.0",
+    "lodash": "^4.17.4"
   }
 }

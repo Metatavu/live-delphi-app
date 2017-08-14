@@ -10,7 +10,7 @@
       this.element.on('click', '.query-selection', $.proxy(this._onQuerySelectionClick, this));
       $(document.body).on('message:queries-found', $.proxy(this._onMessageQueriesFound, this));
       
-      setInterval($.proxy(this._removeEndedQueries, this), 100);
+      setInterval($.proxy(this._checkQueries, this), 5000);
     },
     
     listQueries: function() {   
@@ -26,9 +26,17 @@
       $('.query-container').removeClass('loading');
       
       const queries = data.queries;
+      let removedQueryIds = $('a[data-query-id]').map((index, queryElement) => {
+        return parseInt($(queryElement).attr('data-query-id'));
+      }).get();
       
-      queries.forEach((query) => {        
+      queries.forEach((query) => {
+        removedQueryIds  = _.without(removedQueryIds, query.id);
         this._renderQueryElement(query);
+      });
+      
+      removedQueryIds.forEach((removedQueryId) => {
+        $(`a[data-query-id=${removedQueryId}]`).closest('li.list-group-item').remove();
       });
     },
     
@@ -36,25 +44,23 @@
       $(document.body).liveDelphiQuery('joinQuery', queryId, data);
     },
     
-    _removeEndedQueries: function() {
-      $.each($('.select-query-btn'), (index, element ) => {
-      let queryEnds = $(element).attr('data-query-ends');
-        let endingMoment = moment(queryEnds);
-        if (queryEnds && endingMoment.isBefore(moment())) {
-          $(element).parent().remove();
-        }
+    _checkQueries: function() {
+     $(document.body).liveDelphiClient('sendMessage', {
+        'type': 'list-active-queries'
       });
     },
     
     _renderQueryElement: function(query) {
+      const queryListItem = pugQueryListItem({
+        query: query
+      });
+      
       const existingQueryElement = $(`a[data-query-id=${query.id}]`);
       if (existingQueryElement.length > 0) {
-        existingQueryElement.closest('li.list-group-item').remove();
+        existingQueryElement.closest('li.list-group-item').replaceWith(queryListItem);
+      } else {
+        $('.available-queries').append(queryListItem);
       }
-      
-      $('.available-queries').append(pugQueryListItem({
-        query: query
-      }));
     },
     
     _onQuerySelectionClick: function(event) {
