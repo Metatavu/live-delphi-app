@@ -11,7 +11,10 @@
       maxY: 6,
       pendingTime: 1000,
       tooltipActive: false,
-      fadeUpdateInterval: 200
+      fadeUpdateInterval: 200,
+      userAnswerUpdateInterval: 500,
+      userAnswerSizeSmall: 8,
+      userAnswerSizeLarge: 10
     },
     
     _create : function() {
@@ -19,6 +22,9 @@
       this._series = [];
       this.currentX  = 0;
       this.currentY = 0;
+      this._loggedUserHash = null; 
+      this._loggedUserIterator = 0;
+      
       const chartWidth = $(this.element).parent().width();
       $(this.element).css('width', chartWidth);
       $(this.element).css('height', chartWidth);
@@ -89,7 +95,12 @@
       
       $(this.element).on('touchstart', (e) => { this._onCanvasTouchStart(e) } );
       $(this.element).on('touchend', (e) => { this._onCanvasTouchEnd(e) } );
-      setInterval(() => { this._updateFade() }, this.options.fadeUpdateInterval);
+      setInterval($.proxy(this._updateFade, this), this.options.fadeUpdateInterval);
+      setInterval($.proxy(this._updateUserAnswer, this), this.options.userAnswerUpdateInterval);
+    },
+    
+    loggedUserHash: function (loggedUserHash) {
+      this._loggedUserHash = loggedUserHash;
     },
     
     _pointerEventToLayerCoords: function(e){
@@ -167,6 +178,18 @@
        this._updateChart();
     },
     
+    _updateUserAnswer: function () {
+      if (this._loggedUserHash) {
+        const index = this._userHashes.indexOf(this._loggedUserHash);
+        if (index !== -1) {
+          this._loggedUserIterator = (this._loggedUserIterator + 1) % 2;
+          this._series[index].pointRadius = this._loggedUserIterator === 1 
+            ? this.options.userAnswerSizeLarge 
+            : this.options.userAnswerSizeSmall;
+        }
+      }
+    },
+    
     reset: function () {
       this._userHashes = [];
       this._series = [];
@@ -182,9 +205,9 @@
         y: data.y > 6 ?  6 : data.y < 0 ?  0 : data.y
       };
       
-      var index = this._userHashes.indexOf(userHash);
+      const index = this._userHashes.indexOf(userHash);
       if (index !== -1) {
-        var lastUpdated = new Date().getTime();
+        const lastUpdated = new Date().getTime();
         this._series[index].data[0] = newData;
         this._series[index].pointBackgroundColor = this.getColor(data, lastUpdated);
         this._series[index].lastUpdated = lastUpdated;

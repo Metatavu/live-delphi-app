@@ -12,6 +12,9 @@
     
     _create: function() {
       this._queryId = null;
+      this._queryUserId = null;
+      this._userHash = null;
+      
       $(document.body).on('message:answer-changed', $.proxy(this._onMessageAnswerChanged, this));
       $(document.body).on('message:answers-found', $.proxy(this._onMessageAnswersFound, this));
       $(document.body).on('reconnect', $.proxy(this._onReconnect, this));
@@ -66,12 +69,16 @@
       
       $.post(this.options.serverUrl + '/joinQuery/' + queryId, {
         sessionId: sessionId
-      }, $.proxy(function () {
+      }, $.proxy(function (response) {
         this._queryId = queryId;
+        this._queryUserId = response.queryUserId;
+        this._userHash = response.userHash;
         
         $(document.body).trigger("join-query", { 
           queryId: queryId
         }); 
+        
+        $("#chart").liveDelphiChart('loggedUserHash', this._userHash);
         
         this._loadExistingAnswers();
         this._loadExistingRootComments();
