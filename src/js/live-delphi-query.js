@@ -25,17 +25,25 @@
       this._queryId = queryId;
       this._labelX = data.labelX;
       this._labelY = data.labelY;
+      this._colorX = data.colorX;
+      this._colorY = data.colorY;
       this._thesis = data.thesis;
       
-      $('.chart-label-left .chart-label-inner').text(this._labelY);
-      $('.chart-label-bottom .chart-label-inner').text(this._labelX);
+      $('.chart-label-left .chart-label-inner')
+        .text(this._labelY)
+        .append($('<div>').addClass('chart-label-color').css('background-color', this._colorY));
+      
+      $('.chart-label-bottom .chart-label-inner')
+        .text(this._labelX)
+        .append($('<div>').addClass('chart-label-color').css('background-color', this._colorX));
+      
       $('.query-thesis').text(this._thesis);
       
       $("#chart").remove();
       $('.swiper-slide').remove();
       $('.query-view').slideUp(400, () => {
         $('.chart-view').addClass('loading').show();
-        this._createChart();
+        this._createChart(this.getColorX(), this.getColorY());
         const sessionId = $(document.body).liveDelphi('sessionId');
         this._joinQuery(sessionId, this._queryId);
       });
@@ -56,10 +64,21 @@
     getThesis: function() {
       return this._thesis;
     },
+    
+    getColorX: function() {
+      return this._colorX;
+    },
+    
+    getColorY: function() {
+      return this._colorY;
+    },
 
-    _createChart: function() {
+    _createChart: function(colorX, colorY) {
       $(".chart-canvas-container").append($('<canvas>').attr('id', 'chart'));
-      $("#chart").liveDelphiChart();
+      $("#chart").liveDelphiChart({
+        colorX: colorX, 
+        colorY: colorY
+      });
     },
     
     _joinQuery: function (sessionId, queryId) {

@@ -14,7 +14,12 @@
       fadeUpdateInterval: 200,
       userAnswerUpdateInterval: 500,
       userAnswerSizeSmall: 8,
-      userAnswerSizeLarge: 10
+      userAnswerSizeLarge: 10,
+      answerMinSize: 4,
+      answerMaxSize: 7,
+      baseColor: 100,
+      colorX: 'RED', 
+      colorY: 'BLUE'
     },
     
     _create : function() {
@@ -95,8 +100,14 @@
       
       $(this.element).on('touchstart', (e) => { this._onCanvasTouchStart(e) } );
       $(this.element).on('touchend', (e) => { this._onCanvasTouchEnd(e) } );
-      setInterval($.proxy(this._updateFade, this), this.options.fadeUpdateInterval);
-      setInterval($.proxy(this._updateUserAnswer, this), this.options.userAnswerUpdateInterval);
+      this._updateInterval = setInterval($.proxy(this._updateFade, this), this.options.fadeUpdateInterval);
+      this._updateUserAnswerInterval = setInterval($.proxy(this._updateUserAnswer, this), this.options.userAnswerUpdateInterval);
+    },
+    
+    _destroy: function () {
+      clearInterval(this._updateInterval);
+      clearInterval(this._updateUserAnswerInterval);
+      this._scatterChart.destroy();
     },
     
     loggedUserHash: function (loggedUserHash) {
@@ -171,11 +182,18 @@
     },
     
     _updateFade: function () {
-       this._series.forEach($.proxy(function(dataset) {
-         dataset.pointBackgroundColor = this.getColor(dataset.data[0], dataset.lastUpdated);
-       }, this));
+      const anwerCount = this._userHashes.length;
+      const pointRadius = Math.round(this.options.answerMaxSize - this._convertToRange(Math.min(anwerCount, 20), 1, 20, 0, this.options.answerMaxSize - this.options.answerMinSize));
+      const loggedUserIndex = this._loggedUserHash ? this._userHashes.indexOf(this._loggedUserHash) : -1;
+      
+      this._series.forEach($.proxy(function(dataset, index) {
+        dataset.pointBackgroundColor = this.getColor(dataset.data[0], dataset.lastUpdated);
+         if (index !== loggedUserIndex) {
+           dataset.pointRadius = pointRadius;
+         }
+      }, this));
        
-       this._updateChart();
+      this._updateChart();
     },
     
     _updateUserAnswer: function () {
@@ -244,11 +262,20 @@
     },
     
     getColor: function (value, updated) {
-      var red = Math.floor(this._convertToRange(value.x, 0, this.options.maxX, 0, 255));
-      var blue = Math.floor(this._convertToRange(value.y, 0, this.options.maxY, 0, 255));
-      var age = new Date().getTime() - updated;
-      var opacity = this._convertToRange(age, 0, this.options.pendingTime, 0, 1);
-      return "rgba(" + [red, 50, blue, opacity].join(',') + ")";
+      const xColor = Math.floor(this._convertToRange(value.x, 0, this.options.maxX, 0, 255));
+      const yColor = Math.floor(this._convertToRange(value.y, 0, this.options.maxY, 0, 255));
+      const r = this.options.colorX === 'RED' ? xColor : this.options.colorY === 'RED' ? yColor : this.options.baseColor;
+      const g = this.options.colorX === 'GREEN' ? xColor : this.options.colorY === 'GREEN' ? yColor : this.options.baseColor;
+      const b = this.options.colorX === 'BLUE' ? xColor : this.options.colorY === 'BLUE' ? yColor : this.options.baseColor;
+      const age = new Date().getTime() - updated;
+      const a = this._convertToRange(age, 0, this.options.pendingTime, 0, 1);
+      
+      return tinycolor({
+        r: r,
+        g: g,
+        b: b,
+        a: a
+      }).toRgbString();
     },
     
     _getDataSet: function (data) { 

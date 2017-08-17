@@ -164,6 +164,16 @@ body {
         position: relative;
         z-index: 99999;
         font-size: 14px;
+        white-space: nowrap;
+        
+        .chart-label-color {
+          width: 15px;
+          height: 15px;
+          display: inline-block;
+          border: 1px solid #ffffff;
+          margin-bottom: -2px;
+          margin-left: 5px;
+        }
 
         &.chart-label-left {
           -ms-transform: rotate(90deg);
@@ -177,6 +187,7 @@ body {
           .chart-label-inner {
             transform: rotate(180deg);
             transform-origin: center center;
+            display: inline;
           }
         }
 
