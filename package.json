@@ -10,6 +10,8 @@
     "dependencies": {
         "cordova-browser": "~4.1.0",
         "cordova-ios": "^4.4.0",
+        "cordova-plugin-device": "^1.1.6",
+        "cordova-plugin-inappbrowser": "^1.7.1",
         "cordova-plugin-whitelist": "^1.3.2",
         "grunt": "^1.0.1",
         "grunt-contrib-sass": "^1.0.0",
@@ -30,7 +32,9 @@
             "ios"
         ],
         "plugins": {
-            "cordova-plugin-whitelist": {}
+            "cordova-plugin-whitelist": {},
+            "cordova-plugin-inappbrowser": {},
+            "cordova-plugin-device": {}
         }
     }
 }

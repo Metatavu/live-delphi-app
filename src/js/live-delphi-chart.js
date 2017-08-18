@@ -211,6 +211,7 @@
     reset: function () {
       this._userHashes = [];
       this._series = [];
+      this._loggedUserHash = null; 
       this._updateChart();
     },
     

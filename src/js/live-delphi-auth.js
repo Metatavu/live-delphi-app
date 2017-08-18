@@ -24,7 +24,10 @@
           }
         })
         .error((err) => {
-          console.error("Authentication failed", err);
+          if (this.options.logDebug) {
+            console.error("Authentication failed", err);
+          }
+          
           this.element.trigger("authentication-error");
         });
     },

@@ -1,5 +1,5 @@
 /* jshint esversion: 6 */
-/* global window, document, WebSocket, MozWebSocket, $, _, bootbox, moment*/
+/* global window, document, WebSocket, MozWebSocket, $, _, bootbox, moment, device*/
 (function() {
   'use strict';
   
@@ -111,7 +111,14 @@
     
     _rejoinQuery: function () {
       const sessionId = $(document.body).liveDelphi('sessionId');
-      $("#chart").liveDelphiChart('reset');
+      
+      if (device.platform === 'iOS') {
+        $('#chart').liveDelphiChart('destroy').remove();
+        this._createChart(this.getColorX(), this.getColorY());
+      } else {
+        $("#chart").liveDelphiChart('reset');
+      }
+      
       this._joinQuery(sessionId, this._queryId);
     },
     
