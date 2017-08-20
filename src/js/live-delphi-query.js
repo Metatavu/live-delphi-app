@@ -111,14 +111,8 @@
     
     _rejoinQuery: function () {
       const sessionId = $(document.body).liveDelphi('sessionId');
-      
-      if (device.platform === 'iOS') {
-        $('#chart').liveDelphiChart('destroy').remove();
-        this._createChart(this.getColorX(), this.getColorY());
-      } else {
-        $("#chart").liveDelphiChart('reset');
-      }
-      
+      $('#chart').liveDelphiChart('destroy').remove();
+      this._createChart(this.getColorX(), this.getColorY());
       this._joinQuery(sessionId, this._queryId);
     },
     
