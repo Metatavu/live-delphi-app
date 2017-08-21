@@ -13,7 +13,9 @@
         spaceBetween: 5,
         loop: true,
         autoplay: 2000,
-        autoplayDisableOnInteraction: false
+        autoplayDisableOnInteraction: false,
+        nextButton: '.swiper-button-next',
+        prevButton: '.swiper-button-prev',
       });
 
       $(this.element).on('click', '.comment-container', (event) => { this._onCommentContainerClick(event); });
