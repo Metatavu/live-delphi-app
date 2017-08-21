@@ -98,13 +98,8 @@
         }
       });
       
-      if (device.platform === 'browser') {
-        $(this.element).on('mousedown', (e) => { this._onCanvasTouchStart(e); } );
-        $(this.element).on('mouseup', (e) => { this._onCanvasTouchEnd(e); } );       
-      } else {
-        $(this.element).on('touchstart', (e) => { this._onCanvasTouchStart(e); } );
-        $(this.element).on('touchend', (e) => { this._onCanvasTouchEnd(e); } );        
-      }
+      $(this.element).on('touchstart mousedown', (e) => { this._onCanvasTouchStart(e); } );
+      $(this.element).on('touchend mouseup', (e) => { this._onCanvasTouchEnd(e); } );
 
       this._updateInterval = setInterval($.proxy(this._updateFade, this), this.options.fadeUpdateInterval);
       this._updateUserAnswerInterval = setInterval($.proxy(this._updateUserAnswer, this), this.options.userAnswerUpdateInterval);
