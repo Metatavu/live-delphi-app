@@ -158,6 +158,9 @@
       var xValue = ((x - chartLeft) / chartRight) * this.options.maxX;
       var yValue = this.options.maxY - (((y - chartTop) / chartBottom) * this.options.maxY);
 
+      this.currentX = xValue;
+      this.currentY = yValue;
+
       $(document.body).liveDelphiClient('sendMessage', {
         'type': 'answer',
         'x': xValue,
@@ -217,9 +220,7 @@
     },
     
     userData: function (userHash, data) {
-      this.currentX = data.x;
-      this.currentY = data.y;
-      
+
       const newData = {
         x: data.x > 6 ?  6 : data.x < 0 ?  0.05 : data.x,
         y: data.y > 6 ?  6 : data.y < 0 ?  0 : data.y
