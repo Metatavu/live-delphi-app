@@ -18,8 +18,13 @@
         prevButton: '.swiper-button-prev',
       });
 
-      $(this.element).on('click', '.comment-container', (event) => { this._onCommentContainerClick(event); });
-      $(this.element).on('click', '.send-child-comment', (event) => { this._onAddChildCommentClick(event); });
+      $(this.element).on('click', '.comment-container', $.proxy(this._onCommentContainerClick, this));
+      $(this.element).on('click', '.send-child-comment', $.proxy(this._onAddChildCommentClick, this));
+      $(this.element).on('click', '.add-root-comment-btn', $.proxy(this._onAddRootCommentClick, this));
+    },
+
+    _onAddRootCommentClick: function (event) {
+      this.renderRootCommentDialog();
     },
 
     _onAddChildCommentClick: function(event) {
@@ -63,6 +68,26 @@
       } else {
         return text.substring(0, maxLength) + '...';
       }
+    },
+
+    renderRootCommentDialog() {
+      bootbox.prompt({
+        title: 'Type a comment',
+        inputType: 'textarea',
+        backdrop: true,
+        onEscape: true,
+        callback: (comment) => {
+          if(comment) {
+            const values = $("#chart").liveDelphiChart('getCurrentValues');
+            $(document.body).liveDelphiClient('sendMessage', {
+              'type': 'comment',
+              'comment': comment,
+              'x': values.x,
+              'y': values.y
+            });
+          }
+        }
+      });
     },
 
     renderChildComment: function(color, data) {

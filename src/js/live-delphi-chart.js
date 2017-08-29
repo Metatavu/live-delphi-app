@@ -166,22 +166,7 @@
     },
     
     _ontouchAndHold: function() {
-      bootbox.prompt({
-        title: 'Type a comment',
-        inputType: 'textarea',
-        backdrop: true,
-        onEscape: true,
-        callback: (comment) => {
-          if(comment) {
-            $(document.body).liveDelphiClient('sendMessage', {
-              'type': 'comment',
-              'comment': comment,
-              'x': this.currentX,
-              'y': this.currentY
-            });
-          }
-        }
-      });
+      $(document.body).liveDelphiComment('renderRootCommentDialog');
     },
     
     _updateFade: function () {
