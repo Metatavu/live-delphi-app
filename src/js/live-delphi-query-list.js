@@ -65,7 +65,8 @@
     
     _onQuerySelectionClick: function(event) {
       $('#chart').liveDelphiChart('destroy').remove();
-      
+      $('.navbar-brand.custom-brand').text('LiveDelphi');
+
       $('.chart-view').slideUp(400, () => {
         $('.query-view').slideDown(400);
       });
@@ -80,6 +81,8 @@
       
       $('.list-group-item').removeClass('active');
       $(event.target).parent().addClass('active');
+      
+      $('.navbar-brand.custom-brand').text(queryElement.text());
       
       this._joinQuery(parseInt(queryElement.attr('data-query-id')), {
         labelX: queryElement.attr('data-label-x'),

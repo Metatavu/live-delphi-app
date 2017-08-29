@@ -169,6 +169,8 @@
       bootbox.prompt({
         title: 'Type a comment',
         inputType: 'textarea',
+        backdrop: true,
+        onEscape: true,
         callback: (comment) => {
           if(comment) {
             $(document.body).liveDelphiClient('sendMessage', {
