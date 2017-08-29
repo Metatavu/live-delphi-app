@@ -47,7 +47,8 @@
       });
       this.dialog = bootbox.dialog({
         title: commentContainer.find('.comment-text').text(),
-        message: '<div class="child-comments-container"></div><p class="loader-container"><i class="fa fa-spin fa-spinner"></i> Loading...</p><div class="input-group"><input type="text" class="form-control child-comment-input" placeholder="Kirjoita kommentti..."><span class="input-group-btn"><button class="btn btn-primary send-child-comment" type="button">Lähetä</button></span></div>'
+        message: '<div class="child-comments-container"></div><p class="loader-container"><i class="fa fa-spin fa-spinner"></i> Loading...</p><div class="input-group"><input type="text" class="form-control child-comment-input" placeholder="Kirjoita kommentti..."><span class="input-group-btn"><button class="btn btn-primary send-child-comment" type="button">Lähetä</button></span></div>',
+        backdrop: true
       });
       
       this.dialog.on('hidden.bs.modal', () => {
