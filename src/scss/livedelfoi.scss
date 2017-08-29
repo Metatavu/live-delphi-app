@@ -247,23 +247,23 @@ body {
       padding-top: 35px;
       padding-bottom: 5px;
       display: inline-block;
-      -webkit-box-shadow: 1px 1px 5px 0px rgba(145,145,145,1);
-      -moz-box-shadow: 1px 1px 5px 0px rgba(145,145,145,1);
-      box-shadow: 1px 1px 5px 0px rgba(145,145,145,1);
+      -webkit-box-shadow: 1px 1px 5px 0 rgba(145, 145, 145, 1);
+      -moz-box-shadow: 1px 1px 5px 0 rgba(145, 145, 145, 1);
+      box-shadow: 1px 1px 5px 0 rgba(145, 145, 145, 1);
       width: calc(100% - 80px);
 
       .comment-ball {
         width: 30px;
         height: 30px;
         border-radius: 50%;
-        border: 1px solid #F8F8F8;
+        border: 1px solid #f8f8f8;
         display: inline-block;
         position: absolute;
         margin-left: -40px;
-        margin-top: 0px;
-        -webkit-box-shadow: 1px 1px 5px 0px rgba(145,145,145,1);
-        -moz-box-shadow: 1px 1px 5px 0px rgba(145,145,145,1);
-        box-shadow: 1px 1px 5px 0px rgba(145,145,145,1);
+        margin-top: 0;
+        -webkit-box-shadow: 1px 1px 5px 0 rgba(145, 145, 145, 1);
+        -moz-box-shadow: 1px 1px 5px 0 rgba(145, 145, 145, 1);
+        box-shadow: 1px 1px 5px 0 rgba(145, 145, 145, 1);
       }
       
       p {
