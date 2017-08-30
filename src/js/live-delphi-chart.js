@@ -29,11 +29,12 @@
       this.currentY = 0;
       this._loggedUserHash = null; 
       this._loggedUserIterator = 0;
-      
+      $(document.body).liveDelphiComment('disableCommenting');
+
       const chartWidth = $(this.element).parent().width();
       $(this.element).css('width', chartWidth);
       $(this.element).css('height', chartWidth);
-      
+
       this._scatterChart = new Chart(this.element, {
         type: 'line',
         data: {
@@ -158,9 +159,6 @@
       var xValue = ((x - chartLeft) / chartRight) * this.options.maxX;
       var yValue = this.options.maxY - (((y - chartTop) / chartBottom) * this.options.maxY);
 
-      this.currentX = xValue;
-      this.currentY = yValue;
-
       $(document.body).liveDelphiClient('sendMessage', {
         'type': 'answer',
         'x': xValue,
@@ -200,6 +198,7 @@
     },
     
     reset: function () {
+      $(document.body).liveDelphiComment('disableCommenting');
       this._userHashes = [];
       this._series = [];
       this._loggedUserHash = null; 
@@ -207,6 +206,12 @@
     },
     
     userData: function (userHash, data) {
+
+      if (userHash === this._loggedUserHash) {
+        this.currentX = data.x;
+        this.currentY = data.y;
+        $(document.body).liveDelphiComment('enableCommenting');
+      }
 
       const newData = {
         x: data.x > 6 ?  6 : data.x < 0 ?  0.05 : data.x,

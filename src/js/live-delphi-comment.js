@@ -8,6 +8,7 @@
     _create: function() {
       this.openComment = null;
       this.dialog = null;
+      this.commentsEnabled = false;
       this.swiper = new Swiper('.swiper-container', {
         slidesPerView: 1,
         spaceBetween: 5,
@@ -69,8 +70,22 @@
         return text.substring(0, maxLength) + '...';
       }
     },
+    
+    enableCommenting() {
+      this.commentsEnabled = true;
+      $('.add-root-comment-btn').removeClass('disabled');
+    },
+    
+    disableCommenting() {
+      this.commentsEnabled = false;
+      $('.add-root-comment-btn').addClass('disabled');
+    },
 
     renderRootCommentDialog() {
+      if (!this.commentsEnabled) {
+        return;
+      }
+      
       bootbox.prompt({
         title: 'Type a comment',
         inputType: 'textarea',
