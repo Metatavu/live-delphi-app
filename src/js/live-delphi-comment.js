@@ -21,7 +21,7 @@
 
       $(this.element).on('click', '.comment-container', $.proxy(this._onCommentContainerClick, this));
       $(this.element).on('click', '.send-child-comment', $.proxy(this._onAddChildCommentClick, this));
-      $(this.element).on('click', '.add-root-comment-btn', $.proxy(this._onAddRootCommentClick, this));
+      $(this.element).on('click touchstart', '.add-root-comment-btn', $.proxy(this._onAddRootCommentClick, this));
     },
 
     _onAddRootCommentClick: function (event) {
