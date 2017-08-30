@@ -74,7 +74,7 @@
     },
     
     _getKeycloak: function () {
-      return Keycloak(this.options.serverUrl + '/keycloak.json');
+      return Keycloak(`${this.options.serverUrl}/keycloak.json?platform=${device.platform}`);
     }
     
   });
