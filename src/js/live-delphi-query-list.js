@@ -8,6 +8,10 @@
     _create: function() {
       this.element.on('click', '.available-queries .list-group-item', $.proxy(this._onQueryElementClick, this));
       this.element.on('click', '.query-selection', $.proxy(this._onQuerySelectionClick, this));
+      
+      this.element.find('.access-codes').on('itemAdded', $.proxy(this._onAccessCodesChanged, this));
+      this.element.find('.access-codes').on('itemRemoved', $.proxy(this._onAccessCodesChanged, this));
+      
       $(document.body).on('message:queries-found', $.proxy(this._onMessageQueriesFound, this));
       
       setInterval($.proxy(this._checkQueries, this), 5000);
@@ -17,9 +21,11 @@
       $('.query-container').addClass('loading');
       $('.available-queries').empty();
       
-      $(document.body).liveDelphiClient('sendMessage', {
-        'type': 'list-active-queries'
-      });
+      this._sendListQueriesMessage();
+    },
+    
+    _onAccessCodesChanged: function() {
+      this.listQueries();
     },
     
     _onMessageQueriesFound: function(event, data) {
@@ -40,14 +46,25 @@
       });
     },
     
+    _sendListQueriesMessage: function() {
+      $(document.body).liveDelphiClient('sendMessage', {
+        'type': 'list-active-queries',
+        'data': {
+          'accessCodes': this._getAccessCodes()
+        }
+      });
+    },
+    
+    _getAccessCodes: function() {
+      return $(this.element).find('.access-codes').tagsinput('items');
+    },
+    
     _joinQuery: function (queryId, data) {
       $(document.body).liveDelphiQuery('joinQuery', queryId, data);
     },
     
     _checkQueries: function() {
-     $(document.body).liveDelphiClient('sendMessage', {
-        'type': 'list-active-queries'
-      });
+      this._sendListQueriesMessage();
     },
     
     _renderQueryElement: function(query) {
