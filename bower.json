@@ -27,6 +27,8 @@
     "chart.js": "^2.6.0",
     "lodash": "^4.17.4",
     "tinycolor": "^1.4.1",
-    "components-font-awesome": "^4.7.0"
+    "components-font-awesome": "^4.7.0",
+    "tagsinput.bower": "https://cdn.metatavu.io/libs/bootstrap4-tagsinput/4.1.2/tagsinput.bower.css",
+    "tagsinput": "https://cdn.metatavu.io/libs/bootstrap4-tagsinput/4.1.2/tagsinput.js"
   }
 }
